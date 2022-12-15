@@ -8,35 +8,33 @@ import { UpdateProductDto } from './dto/update-product.dto';
 @Injectable()
 export class ProductsService {
   constructor(
-    @InjectModel(Product.name) private productModel: Model<ProductDocument>
+    @InjectModel(Product.name) private model: Model<ProductDocument>
   ) {}
 
   public async getAll(): Promise<Product[]> {
-    return this.productModel.find().exec();
+    return this.model.find().exec();
   }
 
   public async getById(id: string | number): Promise<Product> {
-    return this.productModel.findById(id);
+    return this.model.findById(id);
   }
 
   public async create(body: CreateProductDto): Promise<Product> {
-    return new this.productModel(body).save();
+    return new this.model(body).save();
   }
 
   public async remove(id: string | number): Promise<Product> {
-    return this.productModel.findByIdAndRemove(id);
+    return this.model.findByIdAndRemove(id);
   }
 
   public async update(
     id: string | number,
     body: UpdateProductDto
   ): Promise<Product> {
-    return this.productModel.findByIdAndUpdate(
+    return this.model.findByIdAndUpdate(
       id,
-      {
-        ...body,
-        updatedat: Date.now(),
-      },
-      { new: true });
+      body,
+      { new: true }
+    );
   }
 }

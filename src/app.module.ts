@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { ProductsModule } from './products/products.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { AuthModule } from './auth/auth.module';
       'mongodb+srv://admin:admin@cluster0.okbhktt.mongodb.net/products?retryWrites=true&w=majority',
     ),
     AuthModule,
+    OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService]

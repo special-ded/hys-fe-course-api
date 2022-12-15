@@ -39,6 +39,8 @@ export class Product {
   })
   description: string;
 
+  // owner (username)
+
   @Prop({type: mongoose.Schema.Types.Mixed})
   extraInfo: any;
 }
