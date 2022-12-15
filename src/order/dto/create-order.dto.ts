@@ -30,6 +30,7 @@ export class CreateOrderDto {
   @IsNotEmpty()
   @ArrayUnique((o: OrderProduct): string => o.id)
   // TODO @ValidateNested({each: true})
+  // new ParseArrayPipe({ items: CreateUserDto })
   readonly products: OrderProduct[];
 
 

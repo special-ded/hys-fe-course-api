@@ -55,6 +55,17 @@ export class ProductsController {
     return this.productsService.remove(id);
   }
 
+  // TODO add params validation
+  /*
+  shared
+   export class FindOneParams {
+     @IsNumberString()
+     id: number;
+   }
+
+   @Param() params: FindOneParams,
+  * */
+
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   public update(
