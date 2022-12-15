@@ -39,10 +39,13 @@ export class Product {
   })
   description: string;
 
-  // owner (username)
+  @Prop({
+    required: true
+  })
+  author: string;
 
   @Prop({type: mongoose.Schema.Types.Mixed})
-  extraInfo: any;
+  extraInfo: object;
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product);

@@ -1,8 +1,5 @@
-import { OrderProduct } from "../schemas/order.schema";
+import { CreateOrderDto } from "./create-order.dto";
+import { PartialType } from "@nestjs/mapped-types";
 
-export class UpdateOrderDto {
-  readonly name: string;
-  readonly phone: string;
-  readonly description: string;
-  readonly products: { quantity: number; product: OrderProduct }[];
+export class UpdateOrderDto extends PartialType(CreateOrderDto) {
 }

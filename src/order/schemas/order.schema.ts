@@ -1,13 +1,13 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from "mongoose";
 import { v4 as uuidv4 } from 'uuid';
-import mongoose from "mongoose";
 
 export type OrderDocument = Order & Document;
 
 export interface OrderProduct {
   id: string;
   name: string;
+  quantity: number;
 }
 
 @Schema({
@@ -39,22 +39,19 @@ export class Order {
   })
   phone: string;
 
-  @Prop({
-  })
-  description: string;
+  @Prop()
+  message: string;
 
   @Prop({
     required: true,
     type:[{
       quantity: { type: Number, required: true },
-      product: {
-        id: { type: String, required: true },
-        name: { type: String, required: true  }
-      },
+      id: { type: String, required: true },
+      name: { type: String, required: true  },
       _id : false
     }]
   })
-  products: { quantity: number; product: OrderProduct }[];
+  products: OrderProduct[];
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);
