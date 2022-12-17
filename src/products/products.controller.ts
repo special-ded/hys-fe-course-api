@@ -22,15 +22,6 @@ export class ProductsController {
   ) {
   }
 
-  // @Get()
-  // @Redirect('https://google.com', 301)
-  // getAll(
-  //   @Req() req: Request,
-  //   @Res() res: Response
-  // ): string {
-  //   res.status(222).end('OLOLOLOLO'); // express access
-  //   return 'get all 777';
-  // }
   @Get()
   @HttpCode(HttpStatus.OK)
   public getAll(): Promise<Product[]> {
