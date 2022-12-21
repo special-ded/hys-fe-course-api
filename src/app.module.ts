@@ -18,7 +18,12 @@ const dbConnection: string = `mongodb+srv://${
     ProductsModule,
     ProductsModule,
     UsersModule,
-    MongooseModule.forRoot(dbConnection),
+    MongooseModule.forRoot(dbConnection,{
+      // useUnifiedTopology: true,
+      // useNewUrlParser: true,
+      // useCreateIndex: true, //make this true
+      autoIndex: true, //make this also true
+    }),
     AuthModule,
     OrderModule,
   ],

@@ -14,6 +14,8 @@ export type UserDocument = User & Document;
       ret.id = ret._id;
       delete ret._id;
     },
+    virtuals: true,
+    getters: true
   },
 })
 export class User {
@@ -25,7 +27,9 @@ export class User {
   _id: uuidv4;
 
   @Prop({
-    required: true
+    required: true,
+    unique: true,
+    dropDups: true
   })
   username: string;
 
