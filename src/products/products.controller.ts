@@ -28,12 +28,6 @@ export class ProductsController {
     return this.productsService.getAll();
   }
 
-  @Get()
-  @HttpCode(HttpStatus.OK)
-  public getAllCopy(): Promise<Product[]> {
-    return this.productsService.getAll();
-  }
-
   @Get(':id')
   public getOne(@Param('id') id: number | string): Promise<Product> {
     return this.productsService.getById(id);
