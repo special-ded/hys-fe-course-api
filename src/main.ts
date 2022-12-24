@@ -15,6 +15,7 @@ async function bootstrap() {
     allowedHeaders: '*',
     origin: 'http://localhost:4200',
     credentials: true,
+    "preflightContinue": false,
   });
 
   await app.listen(3000);
