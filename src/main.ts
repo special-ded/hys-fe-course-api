@@ -12,7 +12,7 @@ async function bootstrap() {
   }));
 
   app.enableCors({
-    allowedHeaders: ['content-type'],
+    allowedHeaders: '*',
     origin: 'http://localhost:4200',
     credentials: true,
   });
