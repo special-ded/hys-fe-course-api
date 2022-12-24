@@ -12,7 +12,10 @@ async function bootstrap() {
   }));
 
   app.enableCors({
-    origin: '*',
+    origin: [
+      'http://localhost:4200',
+      '*'
+    ],
     methods: ['POST', 'PUT', 'DELETE', 'GET', 'PATCH', 'OPTIONS']
   });
 
