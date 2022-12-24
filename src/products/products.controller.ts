@@ -35,7 +35,7 @@ export class ProductsController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @Header('Ololo-Header', '777')
+  // @Header('Ololo-Header', '777')
   public create(@Body() body: CreateProductDto): Promise<Product> {
     return this.productsService.create(body);
   }
