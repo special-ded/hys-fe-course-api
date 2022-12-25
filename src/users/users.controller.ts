@@ -16,6 +16,7 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { User } from "./shemas/users.schema";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
+import { HttpException } from "@nestjs/common/exceptions/http.exception";
 
 @UseGuards(JwtAuthGuard)
 @Controller('users')
@@ -40,7 +41,7 @@ export class UsersController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Header('Ololo-Header', '777')
-  public create(@Body() body: CreateUserDto): Promise<User> {
+  public create(@Body() body: CreateUserDto): Promise<User | HttpException> {
     return this.usersService.create(body);
   }
 

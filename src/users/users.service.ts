@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, InternalServerErrorException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { User, UserDocument } from "./shemas/users.schema";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { CreateUserDto } from "./dto/create-user.dto";
 import * as bcrypt from "bcrypt";
+import { HttpException } from "@nestjs/common/exceptions/http.exception";
 
 @Injectable()
 export class UsersService {
@@ -24,13 +25,21 @@ export class UsersService {
     return this.model.findById(id);
   }
 
-  public async create(body: CreateUserDto): Promise<User> {
-    const hashedPass = await bcrypt.hash(body.password, 10);
+  public async create(body: CreateUserDto): Promise<User | HttpException> {
+    try {
+      const hashedPass = await bcrypt.hash(body.password, 10);
 
-    return new this.model({
-      ...body,
-      password: hashedPass
-    }).save();
+      return await new this.model({
+        ...body,
+        password: hashedPass
+      }).save();
+    } catch ({ code }) {
+      if(code === 11000) {
+        throw new ConflictException('User with such name already exists');
+      }
+
+      throw new InternalServerErrorException();
+    }
   }
 
   public async remove(id: string | number): Promise<User> {
