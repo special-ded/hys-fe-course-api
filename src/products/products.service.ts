@@ -11,8 +11,16 @@ export class ProductsService {
     @InjectModel(Product.name) private model: Model<ProductDocument>
   ) {}
 
-  public async getAll(): Promise<Product[]> {
-    return this.model.find().exec();
+  public async getAll(
+    { limit, sort }: { limit: string, sort: string }
+  ): Promise<Product[]> {
+    const queryLimit: number = limit && parseInt(limit);
+
+    return this.model
+      .find()
+      .limit(!isNaN(queryLimit) ? queryLimit : 1)
+      .sort(sort)
+      .exec();
   }
 
   public async getById(id: string | number): Promise<Product> {
