@@ -6,6 +6,9 @@ import { UpdateUserDto } from "./dto/update-user.dto";
 import { CreateUserDto } from "./dto/create-user.dto";
 import * as bcrypt from "bcrypt";
 import { HttpException } from "@nestjs/common/exceptions/http.exception";
+import { BaseControllerService } from "../core/base/base-controller.service";
+import { Order } from "../order/schemas/order.schema";
+import { ListQueryParamsDto } from "../core/dto/list-query-params.dto";
 
 @Injectable()
 export class UsersService {
@@ -13,8 +16,10 @@ export class UsersService {
     @InjectModel(User.name) private model: Model<UserDocument>
   ) {}
 
-  public async getAll(): Promise<User[]> {
-    return this.model.find().exec();
+  public async getAll(
+    query: ListQueryParamsDto
+  ): Promise<User[]> {
+    return BaseControllerService.getAll<User>(this.model, query);
   }
 
   public async findOne(username: string): Promise<User | undefined> {

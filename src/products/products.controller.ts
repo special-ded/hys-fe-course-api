@@ -8,12 +8,13 @@ import {
   HttpStatus,
   Param,
   Post,
-  Put, Query
+  Put, Query, ValidationPipe
 } from "@nestjs/common";
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductsService } from './products.service';
 import { Product } from './shemas/products.schema';
+import { ListQueryParamsDto } from "../core/dto/list-query-params.dto";
 
 @Controller('products')
 export class ProductsController {
@@ -25,9 +26,15 @@ export class ProductsController {
   @Get()
   @HttpCode(HttpStatus.OK)
   public getAll(
-    @Query() query
+    @Query(new ValidationPipe({
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: false
+      },
+      forbidNonWhitelisted: true
+    })) query: ListQueryParamsDto
   ): Promise<Product[]> {
-    return this.productsService.getAll(query);
+    return this.productsService.getAll(query || {} as any);
   }
 
   @Get(':id')

@@ -1,9 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
 import { CreateProductDto } from './dto/create-product.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Product, ProductDocument } from './shemas/products.schema';
-import { Model } from 'mongoose';
+import { Model } from "mongoose";
 import { UpdateProductDto } from './dto/update-product.dto';
+import { ListQueryParamsDto } from "../core/dto/list-query-params.dto";
+import { BaseControllerService } from "../core/base/base-controller.service";
 
 @Injectable()
 export class ProductsService {
@@ -12,15 +14,9 @@ export class ProductsService {
   ) {}
 
   public async getAll(
-    { limit, sort }: { limit: string, sort: string }
+    query: ListQueryParamsDto
   ): Promise<Product[]> {
-    const queryLimit: number = limit && parseInt(limit);
-
-    return this.model
-      .find()
-      .limit(!isNaN(queryLimit) ? queryLimit : 1)
-      .sort(sort)
-      .exec();
+    return BaseControllerService.getAll<Product>(this.model, query);
   }
 
   public async getById(id: string | number): Promise<Product> {

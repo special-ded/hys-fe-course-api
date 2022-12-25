@@ -1,8 +1,22 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+  Query,
+  ValidationPipe
+} from "@nestjs/common";
 import { OrderService } from "./order.service";
 import { Order } from "./schemas/order.schema";
 import { CreateOrderDto } from "./dto/create-order.dto";
 import { UpdateOrderDto } from "./dto/update-order.dto";
+import { ListQueryParamsDto } from "../core/dto/list-query-params.dto";
+import { Product } from "../products/shemas/products.schema";
 
 @Controller("orders")
 export class OrderController {
@@ -13,8 +27,16 @@ export class OrderController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  public getAll(): Promise<Order[]> {
-    return this.orderService.getAll();
+  public getAll(
+    @Query(new ValidationPipe({
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: false
+      },
+      forbidNonWhitelisted: true
+    })) query: ListQueryParamsDto
+  ): Promise<Order[]> {
+    return this.orderService.getAll(query);
   }
 
   @Get(":id")
