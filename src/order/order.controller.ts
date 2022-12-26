@@ -8,7 +8,7 @@ import {
   Param,
   Post,
   Put,
-  Query,
+  Query, UseGuards,
   ValidationPipe
 } from "@nestjs/common";
 import { OrderService } from "./order.service";
@@ -16,7 +16,7 @@ import { Order } from "./schemas/order.schema";
 import { CreateOrderDto } from "./dto/create-order.dto";
 import { UpdateOrderDto } from "./dto/update-order.dto";
 import { ListQueryParamsDto } from "../core/dto/list-query-params.dto";
-import { Product } from "../products/shemas/products.schema";
+import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 
 @Controller("orders")
 export class OrderController {
@@ -25,6 +25,7 @@ export class OrderController {
   ) {
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   @HttpCode(HttpStatus.OK)
   public getAll(
@@ -39,6 +40,7 @@ export class OrderController {
     return this.orderService.getAll(query);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(":id")
   public getOne(@Param("id") id: number | string): Promise<Order> {
     return this.orderService.getById(id);
@@ -50,12 +52,14 @@ export class OrderController {
     return this.orderService.create(body);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(":id")
   @HttpCode(HttpStatus.OK)
   public remove(@Param("id") id: string | number): Promise<Order> {
     return this.orderService.remove(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put(":id")
   @HttpCode(HttpStatus.OK)
   public update(

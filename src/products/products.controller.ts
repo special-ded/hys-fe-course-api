@@ -8,13 +8,14 @@ import {
   HttpStatus,
   Param,
   Post,
-  Put, Query, ValidationPipe
+  Put, Query, UseGuards, ValidationPipe
 } from "@nestjs/common";
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductsService } from './products.service';
 import { Product } from './shemas/products.schema';
 import { ListQueryParamsDto } from "../core/dto/list-query-params.dto";
+import { JwtAuthGuard } from "../auth/jwt-auth.guard";
 
 @Controller('products')
 export class ProductsController {
@@ -42,13 +43,15 @@ export class ProductsController {
     return this.productsService.getById(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  // @Header('Ololo-Header', '777')
+  @Header('Ololo-Header', '777')
   public create(@Body() body: CreateProductDto): Promise<Product> {
     return this.productsService.create(body);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   public remove(@Param('id') id: string | number): Promise<Product> {
@@ -66,6 +69,7 @@ export class ProductsController {
    @Param() params: FindOneParams,
   * */
 
+  @UseGuards(JwtAuthGuard)
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   public update(
