@@ -1,14 +1,13 @@
-import { ConflictException, Injectable, InternalServerErrorException } from "@nestjs/common";
+import { ConflictException, HttpStatus, Injectable, InternalServerErrorException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { User, UserDocument } from "./shemas/users.schema";
 import { UpdateUserDto } from "./dto/update-user.dto";
 import { CreateUserDto } from "./dto/create-user.dto";
-import * as bcrypt from "bcrypt";
 import { HttpException } from "@nestjs/common/exceptions/http.exception";
 import { BaseControllerService } from "../core/base/base-controller.service";
-import { Order } from "../order/schemas/order.schema";
 import { ListQueryParamsDto } from "../core/dto/list-query-params.dto";
+import { use } from "passport";
 
 @Injectable()
 export class UsersService {
@@ -26,17 +25,15 @@ export class UsersService {
     return this.model.findOne({ username }).exec();
   }
 
-  public async getById(id: string | number): Promise<User> {
+  public async getById(id: string): Promise<User> {
     return this.model.findById(id);
   }
 
   public async create(body: CreateUserDto): Promise<User | HttpException> {
     try {
-      const hashedPass = await bcrypt.hash(body.password, 10);
-
       return await new this.model({
         ...body,
-        password: hashedPass
+        password: await BaseControllerService.hashPWD(body.password)
       }).save();
     } catch ({ code }) {
       if(code === 11000) {
@@ -47,18 +44,29 @@ export class UsersService {
     }
   }
 
-  public async remove(id: string | number): Promise<User> {
-    return this.model.findByIdAndRemove(id);
+  public async remove(id: string): Promise<User> {
+    throw new HttpException(
+      'Users cannot be deleted',
+      HttpStatus.FORBIDDEN
+    );
   }
 
   public async update(
-    id: string | number,
+    id: string,
     body: UpdateUserDto
   ): Promise<User> {
-    return this.model.findByIdAndUpdate(
-      id,
-      body,
-      { new: true }
+    const query = BaseControllerService.validateNoEntity(
+      this.model.findByIdAndUpdate(
+        id,
+        {
+          ...body,
+          password: await BaseControllerService.hashPWD(body.password)
+        },
+        { new: true, runValidators: true }
+      ),
+      'User'
     );
+
+    return await BaseControllerService.validateAdmin(id, this.model, query);
   }
 }

@@ -19,7 +19,7 @@ export class OrderService {
     return BaseControllerService.getAll<Order>(this.model, query);
   }
 
-  public async getById(id: string | number): Promise<Order> {
+  public async getById(id: string): Promise<Order> {
     return this.model.findById(id);
   }
 
@@ -27,12 +27,12 @@ export class OrderService {
     return new this.model(body).save();
   }
 
-  public async remove(id: string | number): Promise<Order> {
+  public async remove(id: string): Promise<Order> {
     return this.model.findByIdAndRemove(id);
   }
 
   public async update(
-    id: string | number,
+    id: string,
     body: UpdateOrderDto
   ): Promise<Order> {
     return this.model.findByIdAndUpdate(

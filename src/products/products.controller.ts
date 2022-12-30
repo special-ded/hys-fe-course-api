@@ -39,7 +39,7 @@ export class ProductsController {
   }
 
   @Get(':id')
-  public getOne(@Param('id') id: number | string): Promise<Product> {
+  public getOne(@Param('id') id: string): Promise<Product> {
     return this.productsService.getById(id);
   }
 
@@ -54,7 +54,7 @@ export class ProductsController {
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
-  public remove(@Param('id') id: string | number): Promise<Product> {
+  public remove(@Param('id') id: string): Promise<Product> {
     return this.productsService.remove(id);
   }
 
@@ -73,7 +73,7 @@ export class ProductsController {
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   public update(
-    @Param('id') id: string | number,
+    @Param('id') id: string,
     @Body() body: UpdateProductDto,
   ): Promise<Product> {
     return this.productsService.update(id, body);

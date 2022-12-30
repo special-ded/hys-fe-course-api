@@ -19,7 +19,7 @@ export class ProductsService {
     return BaseControllerService.getAll<Product>(this.model, query);
   }
 
-  public async getById(id: string | number): Promise<Product> {
+  public async getById(id: string): Promise<Product> {
     return this.model.findById(id);
   }
 
@@ -27,12 +27,12 @@ export class ProductsService {
     return new this.model(body).save();
   }
 
-  public async remove(id: string | number): Promise<Product> {
+  public async remove(id: string): Promise<Product> {
     return this.model.findByIdAndRemove(id);
   }
 
   public async update(
-    id: string | number,
+    id: string,
     body: UpdateProductDto
   ): Promise<Product> {
     return this.model.findByIdAndUpdate(

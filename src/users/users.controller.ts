@@ -43,7 +43,7 @@ export class UsersController {
   }
 
   @Get(':id')
-  public getOne(@Param('id') id: number | string): Promise<User> {
+  public getOne(@Param('id') id: string): Promise<User> {
     return this.usersService.getById(id);
   }
 
@@ -56,7 +56,7 @@ export class UsersController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
-  public remove(@Param('id') id: string | number): Promise<User> {
+  public remove(@Param('id') id: string): Promise<User> {
     return this.usersService.remove(id);
   }
 
@@ -74,7 +74,7 @@ export class UsersController {
   @Put(':id')
   @HttpCode(HttpStatus.OK)
   public update(
-    @Param('id') id: string | number,
+    @Param('id') id: string,
     @Body() body: UpdateUserDto,
   ): Promise<User> {
     return this.usersService.update(id, body);

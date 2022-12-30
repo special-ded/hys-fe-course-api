@@ -42,7 +42,7 @@ export class OrderController {
 
   @UseGuards(JwtAuthGuard)
   @Get(":id")
-  public getOne(@Param("id") id: number | string): Promise<Order> {
+  public getOne(@Param("id") id: string): Promise<Order> {
     return this.orderService.getById(id);
   }
 
@@ -55,7 +55,7 @@ export class OrderController {
   @UseGuards(JwtAuthGuard)
   @Delete(":id")
   @HttpCode(HttpStatus.OK)
-  public remove(@Param("id") id: string | number): Promise<Order> {
+  public remove(@Param("id") id: string): Promise<Order> {
     return this.orderService.remove(id);
   }
 
@@ -63,7 +63,7 @@ export class OrderController {
   @Put(":id")
   @HttpCode(HttpStatus.OK)
   public update(
-    @Param("id") id: string | number,
+    @Param("id") id: string,
     @Body() body: UpdateOrderDto
   ): Promise<Order> {
     return this.orderService.update(id, body);
