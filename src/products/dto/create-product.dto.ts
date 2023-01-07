@@ -18,11 +18,11 @@ export class CreateProductDto {
   @IsNotEmpty()
   readonly name: string;
 
-  @Length(3, 255)
-  @IsString()
-  @IsDefined()
-  @IsNotEmpty()
-  readonly author: string;
+  // @Length(3, 255)
+  // @IsString()
+  // @IsDefined()
+  // @IsNotEmpty()
+  // readonly author: string;
 
   @Length(15, 1000)
   @IsString()

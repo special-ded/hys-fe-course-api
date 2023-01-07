@@ -23,8 +23,11 @@ export class ProductsService {
     return this.model.findById(id);
   }
 
-  public async create(body: CreateProductDto): Promise<Product> {
-    return new this.model(body).save();
+  public async create(body: CreateProductDto, req: any): Promise<Product> {
+    return new this.model({
+      ...body,
+      author: req.user.username
+    }).save();
   }
 
   public async remove(id: string): Promise<Product> {

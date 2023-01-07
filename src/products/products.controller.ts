@@ -8,7 +8,7 @@ import {
   HttpStatus,
   Param,
   Post,
-  Put, Query, UseGuards, ValidationPipe
+  Put, Query, Request, UseGuards, ValidationPipe
 } from "@nestjs/common";
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -47,8 +47,11 @@ export class ProductsController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   @Header('Ololo-Header', '777')
-  public create(@Body() body: CreateProductDto): Promise<Product> {
-    return this.productsService.create(body);
+  public create(
+    @Body() body: CreateProductDto,
+    @Request() req: any
+  ): Promise<Product> {
+    return this.productsService.create(body, req);
   }
 
   @UseGuards(JwtAuthGuard)
