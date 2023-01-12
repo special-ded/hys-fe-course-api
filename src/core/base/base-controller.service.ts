@@ -18,8 +18,8 @@ export abstract class BaseControllerService {
           ? [query.filter]
           : query.filter as string[];
 
-    const filterObj =
-      filter.reduce((acc: object, curr: string): object => {
+    const filterObj = filter
+      ? filter.reduce((acc: object, curr: string): object => {
         const [filterKey, filterProp] = curr && curr.split(';');
 
         return {
@@ -28,7 +28,8 @@ export abstract class BaseControllerService {
             [filterKey]: { "$regex": filterProp, "$options": "i" }
           } : {} )
         }
-      }, {});
+      }, {})
+      : {};
 
     return model
       .find(filterObj)
