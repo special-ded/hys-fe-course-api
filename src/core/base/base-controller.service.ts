@@ -10,15 +10,16 @@ export abstract class BaseControllerService {
     query: ListQueryParamsDto,
   ): Promise<T[]> {
     const
-      limit = query && query.limit || 200,
-      sort = query && query.sort || 'createdAt',
-      page = query && query.page || 1,
-      filter = query && query.filter || '';
+      limit: number = query && query.limit || 200,
+      sort: string = query && query.sort || 'createdAt',
+      page: number = query && query.page || 1,
+      filter: string = query && query.filter || '';
 
     const [filterKey, filterProp] = filter && filter.split(';');
+
     return model
       .find(filterKey && filterProp ? {
-        [filterKey]: filterProp
+        [filterKey]: { "$regex": filterProp, "$options": "i" }
       } : {} )
       .limit(limit)
       .sort(sort)
