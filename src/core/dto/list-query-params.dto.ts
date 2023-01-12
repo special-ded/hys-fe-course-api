@@ -1,4 +1,13 @@
-import { IsDefined, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, Length, Max, Min } from "class-validator";
+import {
+  IsDefined,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Length,
+  Max,
+  Min
+} from "class-validator";
 import { Type } from "class-transformer";
 
 export class ListQueryParamsDto {
@@ -27,9 +36,8 @@ export class ListQueryParamsDto {
   @Type(() => Number)
   page: number;
 
-  @IsString()
   @IsDefined()
   @IsNotEmpty()
   @IsOptional()
-  filter: string;
+  filter: string | string[];
 }

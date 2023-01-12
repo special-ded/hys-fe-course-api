@@ -13,14 +13,25 @@ export abstract class BaseControllerService {
       limit: number = query && query.limit || 200,
       sort: string = query && query.sort || 'createdAt',
       page: number = query && query.page || 1,
-      filter: string = query && query.filter || '';
+      filter: string[] =
+        query && query.filter && typeof query.filter === 'string'
+          ? [query.filter]
+          : query.filter as string[];
 
-    const [filterKey, filterProp] = filter && filter.split(';');
+    const filterObj =
+      filter.reduce((acc: object, curr: string): object => {
+        const [filterKey, filterProp] = curr && curr.split(';');
+
+        return {
+          ...acc,
+          ...(filterKey && filterProp ? {
+            [filterKey]: { "$regex": filterProp, "$options": "i" }
+          } : {} )
+        }
+      }, {});
 
     return model
-      .find(filterKey && filterProp ? {
-        [filterKey]: { "$regex": filterProp, "$options": "i" }
-      } : {} )
+      .find(filterObj)
       .limit(limit)
       .sort(sort)
       .skip((page - 1) * limit)
