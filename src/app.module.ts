@@ -11,7 +11,11 @@ const dbConnection: string = `mongodb+srv://${
   process.env.DB_USER || 'admin'
 }:${
   process.env.DB_PASSWORD || 'admin'
-}@cluster0.okbhktt.mongodb.net/products?retryWrites=true&w=majority`;
+}@${
+  process.env.DB_CLUSTER || 'cluster0'
+}.${
+  process.env.DB_SERVICE_HASH || 'okbhktt'
+}.mongodb.net/products?retryWrites=true&w=majority`;
 
 @Module({
   imports: [
