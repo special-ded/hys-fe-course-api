@@ -8,7 +8,7 @@ import {
   HttpStatus,
   Param,
   Post,
-  Put, Query, Request, UseGuards, ValidationPipe
+  Put, Query, Request, UseGuards, ValidationPipe, Res
 } from "@nestjs/common";
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -16,6 +16,7 @@ import { ProductsService } from './products.service';
 import { Product } from './shemas/products.schema';
 import { ListQueryParamsDto } from "../core/dto/list-query-params.dto";
 import { JwtAuthGuard } from "../auth/jwt-auth.guard";
+import { Response } from 'express';
 
 @Controller('products')
 export class ProductsController {
@@ -26,16 +27,21 @@ export class ProductsController {
 
   @Get()
   @HttpCode(HttpStatus.OK)
-  public getAll(
+  public async getAll(
     @Query(new ValidationPipe({
       transform: true,
       transformOptions: {
         enableImplicitConversion: false
       },
       forbidNonWhitelisted: true
-    })) query: ListQueryParamsDto
-  ): Promise<Product[]> {
-    return this.productsService.getAll(query || {} as any);
+    })) query: ListQueryParamsDto,
+    @Res() res: Response
+  ): Promise<Response> {
+    const { allProductsCount, productsByQuery } = await this.productsService.getAll(query || {} as any);
+
+    res.header( 'all-products', allProductsCount.toString());
+    res.json(productsByQuery);
+    return res;
   }
 
   @Get(':id')
