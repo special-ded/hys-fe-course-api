@@ -11,13 +11,15 @@ async function bootstrap() {
     // transform: true
   }));
 
-  app.enableCors({
+  app.enableCors(
+<!-- {
     allowedHeaders: '*',
     origin: '*',
     credentials: true,
     "preflightContinue": false,
     methods: ['GET', 'PUT', 'POST', 'DELETE', 'PATCH', 'OPTIONS']
-  });
+  } -->
+);
 
   await app.listen(3000);
 }
